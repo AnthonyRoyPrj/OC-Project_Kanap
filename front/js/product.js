@@ -59,13 +59,12 @@ document
         const orderProduct = {
             id: productId,
             color: productColor,
-            quantity: parseInt(productQuantity),
-            name: productName
+            quantity: parseInt(productQuantity)
         };     
         if (orderProduct.color === "" || orderProduct.quantity === 0) {
             alert("Veuillez renseignez une couleur et une quantité.");
         } else {
             addProductToCart(orderProduct)
-            alert(`Le produit ${orderProduct.name} ${orderProduct.color} x${orderProduct.quantity} a été ajouté au panier.`);
+            alert(`Le produit ${productName} ${orderProduct.color} x${orderProduct.quantity} a été ajouté au panier.`);
         }
     });

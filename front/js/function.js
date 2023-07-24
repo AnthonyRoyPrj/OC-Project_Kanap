@@ -1,15 +1,25 @@
+/**
+ * Gets the value of the wanted parameter in the URL
+ * @param { String } param 
+ * @returns { String }
+ */
 export function getParamFromUrl(param) {
-    // Gets the value of the wanted parameter in the URL
     return new URL(window.location.href).searchParams.get(param);
 }
 
+/**
+ * Saves cart in the Local Storage
+ * @param { Object.<id: String, color: String, quantity: Integer> } localStorageObject 
+ */
 function setLocalStorage(localStorageObject) {
-    // Saves cart in the Local Storage
     localStorage.setItem('cart', JSON.stringify(localStorageObject));
 }
 
+/**
+ * Adds product to the cart
+ * @param { Object.<id: String, color: String, quantity: Integer> } orderProduct 
+ */
 export function addProductToCart(orderProduct) {
-    // Adds product to the cart
     const cart = localStorage.getItem('cart');
     if (cart) {
         const parsedCart = JSON.parse(cart);
@@ -29,8 +39,12 @@ export function addProductToCart(orderProduct) {
     }
 }
 
+/**
+ * Gets an array of cart products with centralized data
+ * @param { Array.<Object> } productsFromApi 
+ * @returns { Array.<Object> }
+ */
 export function getProductsFromCart(productsFromApi) {
-    // Gets an array of cart products with centralized data
     const cart = localStorage.getItem('cart');
     if (!cart) {
         return [];
@@ -52,12 +66,16 @@ export function getProductsFromCart(productsFromApi) {
             description: matchingProductFromApi.description,
             altTxt: matchingProductFromApi.altTxt
         };
-    })
+    });
     return completeCart;
 }
 
+/**
+ * Provides the total quantity of cart products
+ * @param { Array.<Object> } completeProductWithId 
+ * @returns { Integer }
+ */
 function getTotalQuantity(completeProductWithId) {
-    // Provides the total quantity of cart products
     if (completeProductWithId !== []) {
         const quantityMap = completeProductWithId.map(product => product.quantity);
         return quantityMap.reduce((somme, valeur) => somme + valeur, 0);
@@ -66,8 +84,12 @@ function getTotalQuantity(completeProductWithId) {
     }
 }
 
+/**
+ * Provides the total quantity of cart products
+ * @param { Array.<Object> } completeProductWithId 
+ * @returns { Integer }
+ */
 function getTotalPrice(completeProductWithId) {
-    // Provides the total quantity of cart products
     if (completeProductWithId !== []) {
         const priceMap = completeProductWithId.map(product => [product.quantity, product.price]);
         return priceMap.reduce((somme, valeur) => somme + (valeur[0] * valeur[1]), 0);
@@ -76,35 +98,51 @@ function getTotalPrice(completeProductWithId) {
     }
 }
 
+/**
+ * Sets the total quantity of cart products
+ * @param { Integer } totalQuantity 
+ */
 function setTotalQuantity(totalQuantity) {
-    // Sets the total quantity of cart products
     document
         .getElementById("totalQuantity")
         .innerText = totalQuantity;
 }
 
+/**
+ * Sets the total price of cart products
+ * @param { Integer } totalPrice 
+ */
 function setTotalPrice(totalPrice) {
-    // Sets the total price of cart products
     document
         .getElementById("totalPrice")
         .innerText = totalPrice;
 }
 
+/**
+ * Calculates and sets the total price and quantity of cart products
+ * @param { Array.<Object> } completeProductWithId 
+ */
 export function setTotalAmounts(completeProductWithId) {
-    // Calculates and sets the total price and quantity of cart products
     const totalQuantity = getTotalQuantity(completeProductWithId);
     const totalPrice = getTotalPrice(completeProductWithId);
     setTotalQuantity(totalQuantity);
     setTotalPrice(totalPrice);
 }
 
+/**
+ * Asks the user to confirm the removal of a product from the cart
+ * @returns { Boolean }
+ */
 export function deleteConfirmation() {
-    // Asks the user to confirm the removal of a product from the cart
     return window.confirm("Voulez-vous vraiment supprimer ce produit du panier ?");
 }
 
+/**
+ * Gets the data stored in the HTML element
+ * @param { HTMLElement } product 
+ * @returns { Object }
+ */
 function getProductInfo(product) {
-    // Gets the data from the HTML product
     const elementWithProductInfo = product.closest(".cart__item");
     return {
         element: elementWithProductInfo,
@@ -113,8 +151,12 @@ function getProductInfo(product) {
     };
 }
 
+/**
+ * Creates a valid object to be saved in the cart
+ * @param { Object } productObject 
+ * @returns { Object }
+ */
 function createLocalStorageObject(productObject) {
-    // Creates a valid object to be saved in the cart
     return {
         products: productObject.map(product => {
             return {
@@ -126,8 +168,12 @@ function createLocalStorageObject(productObject) {
     };
 }
 
+/**
+ * Removes a product from the cart
+ * @param { HTMLElement } productToDelete 
+ * @param { Promise } apiValue 
+ */
 export function deleteProduct(productToDelete, apiValue) {
-    // Removes a product from the cart
     const itemToDelete = getProductInfo(productToDelete);
     const newCartProducts = getProductsFromCart(apiValue).filter(product => product.id !== itemToDelete.id || product.color !== itemToDelete.color);
     const newLocalStorageCartProducts = createLocalStorageObject(newCartProducts);
@@ -138,8 +184,12 @@ export function deleteProduct(productToDelete, apiValue) {
     setTotalAmounts(newCartProducts);
 }
 
+/**
+ * Changes the quantity of a product in the cart
+ * @param { HTMLElement } productToChangeQuantity 
+ * @param { Promise } apiValue 
+ */
 export function changeProductQuantity(productToChangeQuantity, apiValue) {
-    // Changes the quantity of a product in the cart
     const itemToChangeQuantity = getProductInfo(productToChangeQuantity);
     const newCartProducts = getProductsFromCart(apiValue)
     const itemWithChangedQuantity = newCartProducts.find(product => product.id === itemToChangeQuantity.id && product.color === itemToChangeQuantity.color);
@@ -149,21 +199,34 @@ export function changeProductQuantity(productToChangeQuantity, apiValue) {
     setTotalAmounts(newCartProducts);
 }
 
-export function isValueZero(e) {
-    // Checks if the value is 0
-    return +e.target.value === 0
+/**
+ * Checks if the value is 0
+ * @param { String } value 
+ * @returns { Boolean }
+ */
+export function isValueZero(value) {
+    return +value === 0
 }
 
-export function isValueValid(e) {
-    // Checks if the value is an integer between 1 and 100
-    if (isNaN(e.target.value) || (+e.target.value < 1 || +e.target.value > 100)) {
+/**
+ * Checks if the value is an integer between 1 and 100
+ * @param { String } value 
+ * @returns { Boolean }
+ */
+export function isValueValid(value) {
+    if (isNaN(value) || (+value < 1 || +value > 100)) {
         return false
     }
     return true
 }
 
+/**
+ * Checks the values of the associate input in the order form
+ * @param { String } value 
+ * @param { String } name 
+ * @returns { Boolean }
+ */
 export function inputValidation(value, name) {
-    // Checks the values in the order form
     switch (name) {
         case "email":
             return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);

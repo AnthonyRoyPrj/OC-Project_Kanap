@@ -44,7 +44,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
 const inputQuantity = document.getElementById("quantity");
 inputQuantity.addEventListener("change", function (e) {
-    if (!isValueValid(e)) {
+    if (!isValueValid(e.target.value)) {
         inputQuantity.value = 0;
         alert("Veuillez renseigner un nombre entier entre 1 et 100");
     }

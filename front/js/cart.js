@@ -65,10 +65,10 @@ fetch("http://localhost:3000/api/products")
             const itemQuantity = cartQuantityItems[i];
             let previousItemQuantity = itemQuantity.value;
             itemQuantity.addEventListener("change", function (e) {
-                if (isValueValid(e)) {
+                if (isValueValid(e.target.value)) {
                     previousItemQuantity = itemQuantity.value;
                     changeProductQuantity(itemQuantity, value);
-                } else if (isValueZero(e)) {
+                } else if (isValueZero(e.target.value)) {
                     if (deleteConfirmation()) {
                         deleteProduct(itemQuantity, value)
                     } else {
@@ -87,6 +87,7 @@ fetch("http://localhost:3000/api/products")
         const inputList = document.querySelectorAll(".cart__order__form__question > input");
         for (let inputElement of inputList) {
             inputElement.addEventListener("change", function (event) {
+                console.log(typeof event.target.value);
                 if (inputValidation(event.target.value, inputElement.name)) {
                     contact[inputElement.name] = event.target.value;
                     document.getElementById(`${inputElement.name}ErrorMsg`).innerText = "";

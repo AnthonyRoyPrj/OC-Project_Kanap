@@ -87,7 +87,6 @@ fetch("http://localhost:3000/api/products")
         const inputList = document.querySelectorAll(".cart__order__form__question > input");
         for (let inputElement of inputList) {
             inputElement.addEventListener("change", function (event) {
-                console.log(typeof event.target.value);
                 if (inputValidation(event.target.value, inputElement.name)) {
                     contact[inputElement.name] = event.target.value;
                     document.getElementById(`${inputElement.name}ErrorMsg`).innerText = "";

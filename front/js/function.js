@@ -1,13 +1,25 @@
+/**
+ * Gets the value of the wanted parameter in the URL
+ * @param { String } param 
+ * @returns { String }
+ */
 export function getParamFromUrl(param) {
-    // Gets the value of the wanted parameter in the URL
     return new URL(window.location.href).searchParams.get(param);
 }
 
+/**
+ * Saves cart in the Local Storage
+ * @param {*} localStorageObject 
+ */
 function setLocalStorage(localStorageObject) {
     // Saves cart in the Local Storage
     localStorage.setItem('cart', JSON.stringify(localStorageObject));
 }
 
+/**
+ * Adds product to the cart
+ * @param { Object.<id: String, color: String, quantity: Integer, name: String> } orderProduct 
+ */
 export function addProductToCart(orderProduct) {
     // Adds product to the cart
     const cart = localStorage.getItem('cart');
